@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stock - Inventory System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/sidebar') %>
+  <div class="stock">
+    <h1>Stock Management</h1>
+    <div style="margin-bottom: 15px;">
+      <form action="/stock/export" method="GET" style="display:inline;">
+        <button type="submit" name="export" value="csv" style="background:#2196f3;color:#fff;border:none;padding:8px 16px;border-radius:4px;">Export CSV</button>
+      </form>
+      <form action="/stock" method="GET" style="display:inline;margin-left:20px;">
+        <input type="text" name="search" placeholder="Search product name..." value="<%= typeof search !== 'undefined' ? search : '' %>" style="padding:8px;border-radius:4px;border:1px solid #ccc;">
+        <button type="submit" style="background:#4caf50;color:#fff;border:none;padding:8px 16px;border-radius:4px;">Search</button>
+      </form>
+    </div>
+    <% if (typeof message !== 'undefined' && message) { %>
+      <div style="color:green;margin-bottom:10px;"><%= message %></div>
+    <% } %>
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th><th>Stock</th><th>Status</th><th>Adjust</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(product => { %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= product.stock %></td>
+            <td>
+              <% if (product.stock < product.lowStockThreshold) { %>
+                <span style="background:#e74c3c;color:#fff;padding:4px 10px;border-radius:4px;">Low</span>
+              <% } else { %>
+                <span style="background:#4caf50;color:#fff;padding:4px 10px;border-radius:4px;">OK</span>
+              <% } %>
+            </td>
+            <td>
+              <form action="/stock/adjust/<%= product._id %>" method="POST">
+                <input type="number" name="stock" value="<%= product.stock %>" placeholder="Adjust stock">
+                <button type="submit">Update</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html> 

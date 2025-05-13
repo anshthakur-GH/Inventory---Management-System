@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Products - Inventory System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/sidebar') %>
+  <div class="products">
+    <h1>Products</h1>
+    <form method="GET" action="/products">
+      <input type="text" name="search" placeholder="Search products...">
+      <select name="category">
+        <option value="">All Categories</option>
+        <% categories.forEach(cat => { %>
+          <option value="<%= cat %>"><%= cat %></option>
+        <% }) %>
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+    <a href="/products/add"><button>Add Product</button></a>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% products.forEach(product => { %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= product.category %></td>
+            <td><%= product.price %></td>
+            <td><%= product.stock %></td>
+            <td>
+              <form action="/products/edit/<%= product._id %>" method="GET" style="display:inline;">
+                <button type="submit" style="background:#e67e22;color:#fff;border:none;padding:6px 12px;border-radius:4px;margin-right:5px;">Edit</button>
+              </form>
+              <form action="/products/delete/<%= product._id %>" method="POST" style="display:inline;">
+                <button type="submit" onclick="return confirm('Delete this product?')" style="background:#e74c3c;color:#fff;border:none;padding:6px 12px;border-radius:4px;">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html> 
