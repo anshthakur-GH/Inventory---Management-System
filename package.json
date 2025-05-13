@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "postinstall": "chmod +x ./node_modules/.bin/tsc || npx chmod-cli +x ./node_modules/.bin/tsc"
   },
   "keywords": [],
   "author": "",
@@ -31,7 +32,8 @@
     "@types/node": "^20.4.2",
     "@types/pdfkit": "^0.13.9",
     "nodemon": "^2.0.22",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "chmod-cli": "^2.0.0"
   },
   "engines": {
     "node": "18.x"
