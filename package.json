@@ -5,9 +5,8 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "npx tsc",
-    "postinstall": "chmod +x ./node_modules/.bin/tsc || npx chmod-cli +x ./node_modules/.bin/tsc",
-    "postbuild": "npx cpx -r src/views dist && npx cpx -r src/public dist"
+    "build": "npx tsc && npx cpx -r src/views dist && npx cpx -r src/public dist",
+    "postinstall": "node -e \"if (process.platform !== 'win32') require('child_process').execSync('chmod +x ./node_modules/.bin/tsc')\""
   },
   "keywords": [],
   "author": "",
@@ -32,10 +31,9 @@
     "@types/json2csv": "^5.0.7",
     "@types/node": "^20.4.2",
     "@types/pdfkit": "^0.13.9",
-    "chmod-cli": "^2.0.0",
-    "cpx": "^1.5.0",
     "nodemon": "^2.0.22",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "cpx": "^1.5.0"
   },
   "engines": {
     "node": "18.x"
