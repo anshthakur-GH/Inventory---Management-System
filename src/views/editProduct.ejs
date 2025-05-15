@@ -8,7 +8,7 @@
   <%- include('partials/sidebar') %>
   <div class="products">
     <h1>Edit Product</h1>
-    <form action="/products/edit/<%= product._id %>" method="POST">
+    <form action="/products/edit/<%= product.id %>" method="POST">
       <input type="text" name="name" value="<%= product.name %>" placeholder="Product Name" required>
       <input type="text" name="category" value="<%= product.category %>" placeholder="Category" required>
       <input type="number" name="price" value="<%= product.price %>" min="0" placeholder="Price" required>

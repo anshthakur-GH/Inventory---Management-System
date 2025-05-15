@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Order from '../models/Order';
+import { Order } from '../models/Order';
 import { Parser } from 'json2csv';
 import PDFDocument from 'pdfkit';
 const router = Router();
@@ -7,15 +7,14 @@ const router = Router();
 // Generate reports from database
 router.get('/', async (req, res) => {
   const { from, to, export: exportType } = req.query;
-  const dateFilter: any = {};
-  if (from) dateFilter.$gte = new Date(from as string);
-  if (to) dateFilter.$lte = new Date(to as string);
-  const dateQuery = Object.keys(dateFilter).length ? { orderDate: dateFilter } : {};
-  const orders = await Order.find(dateQuery).sort({ orderDate: -1 });
+  const where: any = {};
+  if (from) where.orderDate = { ...(where.orderDate || {}), $gte: new Date(from as string) };
+  if (to) where.orderDate = { ...(where.orderDate || {}), $lte: new Date(to as string) };
+  const orders = await Order.findAll({ where, order: [['orderDate', 'DESC']] });
   const reports = orders.map(order => ({
     date: order.orderDate.toISOString().slice(0, 10),
     type: order.status === 'purchase' ? 'Purchase' : 'Sale',
-    details: `Order #${order._id}`,
+    details: `Order #${order.id}`,
     amount: order.totalAmount
   }));
 

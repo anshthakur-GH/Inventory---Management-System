@@ -33,10 +33,10 @@
             <td><%= product.price %></td>
             <td><%= product.stock %></td>
             <td>
-              <form action="/products/edit/<%= product._id %>" method="GET" style="display:inline;">
+              <form action="/products/edit/<%= product.id %>" method="GET" style="display:inline;">
                 <button type="submit" style="background:#e67e22;color:#fff;border:none;padding:6px 12px;border-radius:4px;margin-right:5px;">Edit</button>
               </form>
-              <form action="/products/delete/<%= product._id %>" method="POST" style="display:inline;">
+              <form action="/products/delete/<%= product.id %>" method="POST" style="display:inline;">
                 <button type="submit" onclick="return confirm('Delete this product?')" style="background:#e74c3c;color:#fff;border:none;padding:6px 12px;border-radius:4px;">Delete</button>
               </form>
             </td>

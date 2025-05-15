@@ -12,17 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
+exports.sequelize = void 0;
+exports.default = connectDB;
+const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield mongoose_1.default.connect(process.env.MONGODB_URI);
-        console.log('MongoDB connected');
-    }
-    catch (err) {
-        console.error('MongoDB connection error:', err);
-        process.exit(1);
-    }
+exports.sequelize = new sequelize_1.Sequelize(process.env.MYSQL_DATABASE || 'inventory', process.env.MYSQL_USER || 'root', process.env.MYSQL_PASSWORD || '', {
+    host: process.env.MYSQL_HOST || 'localhost',
+    port: Number(process.env.MYSQL_PORT) || 3306,
+    dialect: 'mysql',
+    logging: false,
 });
-exports.default = connectDB;
+function connectDB() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield exports.sequelize.authenticate();
+            console.log('MySQL connected');
+        }
+        catch (err) {
+            console.error('MySQL connection error:', err);
+            process.exit(1);
+        }
+    });
+}
