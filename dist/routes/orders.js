@@ -8,13 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const Product_1 = __importDefault(require("../models/Product"));
-const Order_1 = __importDefault(require("../models/Order"));
+const Product_1 = require("../models/Product");
+const Order_1 = require("../models/Order");
 const router = (0, express_1.Router)();
 function getProductName(item) {
     if (item && item.productId && typeof item.productId === 'object' && 'name' in item.productId) {
@@ -24,17 +21,20 @@ function getProductName(item) {
 }
 // List orders and products
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield Product_1.default.find();
-    const orders = yield Order_1.default.find().populate('items.productId').sort({ orderDate: -1 });
+    const products = yield Product_1.Product.findAll();
+    const orders = yield Order_1.Order.findAll({
+        include: [{ model: Order_1.OrderItem, as: 'items', include: [Product_1.Product] }],
+        order: [['orderDate', 'DESC']]
+    });
     res.render('orders', {
         products,
         orders: orders.map(order => {
-            var _a;
+            var _a, _b, _c;
             return ({
-                _id: order._id,
+                _id: order.id,
                 orderDate: order.orderDate.toISOString().slice(0, 10),
-                productName: getProductName(order.items[0]),
-                quantity: ((_a = order.items[0]) === null || _a === void 0 ? void 0 : _a.quantity) || 0,
+                productName: ((_b = (_a = order.items[0]) === null || _a === void 0 ? void 0 : _a.Product) === null || _b === void 0 ? void 0 : _b.name) || '',
+                quantity: ((_c = order.items[0]) === null || _c === void 0 ? void 0 : _c.quantity) || 0,
                 totalAmount: order.totalAmount
             });
         })
@@ -43,19 +43,25 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 // Place a new order and update product stock
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { productId, quantity, discount } = req.body;
-    const product = yield Product_1.default.findById(productId);
+    const product = yield Product_1.Product.findByPk(productId);
     if (!product)
         return res.redirect('/orders');
     const qty = parseInt(quantity);
     const disc = parseFloat(discount) || 0;
     const price = product.price;
     const total = (price * qty) - disc;
-    yield Order_1.default.create({
+    const order = yield Order_1.Order.create({
         orderDate: new Date(),
         customer: 'Manual',
-        items: [{ productId, quantity: qty, price, discount: disc }],
         totalAmount: total,
         status: 'completed'
+    });
+    yield Order_1.OrderItem.create({
+        orderId: order.id,
+        productId,
+        quantity: qty,
+        price,
+        discount: disc
     });
     product.stock -= qty;
     yield product.save();

@@ -11,7 +11,7 @@
     <form action="/orders" method="POST">
       <select name="productId" required>
         <% products.forEach(product => { %>
-          <option value="<%= product._id %>"><%= product.name %></option>
+          <option value="<%= product.id %>"><%= product.name %></option>
         <% }) %>
       </select>
       <input type="number" name="quantity" min="1" placeholder="Quantity" required>

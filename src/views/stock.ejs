@@ -39,7 +39,7 @@
               <% } %>
             </td>
             <td>
-              <form action="/stock/adjust/<%= product._id %>" method="POST">
+              <form action="/stock/adjust/<%= product.id %>" method="POST">
                 <input type="number" name="stock" value="<%= product.stock %>" placeholder="Adjust stock">
                 <button type="submit">Update</button>
               </form>

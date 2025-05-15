@@ -1,9 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-const userSchema = new mongoose_1.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, default: 'user' }
+exports.User = void 0;
+const sequelize_1 = require("sequelize");
+const db_1 = require("../db");
+class User extends sequelize_1.Model {
+}
+exports.User = User;
+User.init({
+    id: {
+        type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    username: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    role: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true,
+    },
+}, {
+    sequelize: db_1.sequelize,
+    tableName: 'users',
 });
-exports.default = (0, mongoose_1.model)('User', userSchema);

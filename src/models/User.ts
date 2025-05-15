@@ -1,15 +1,33 @@
-import { Schema, model, Document } from 'mongoose';
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../db';
 
-export interface IUser extends Document {
-  username: string;
-  password: string;
-  role: string;
+export class User extends Model {
+  public id!: number;
+  public username!: string;
+  public password!: string;
+  public role?: string;
 }
 
-const userSchema = new Schema<IUser>({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, default: 'user' }
-});
-
-export default model<IUser>('User', userSchema); 
+User.init({
+  id: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+}, {
+  sequelize,
+  tableName: 'users',
+}); 

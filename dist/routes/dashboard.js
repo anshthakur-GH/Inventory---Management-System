@@ -13,36 +13,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const Product_1 = __importDefault(require("../models/Product"));
-const Order_1 = __importDefault(require("../models/Order"));
+const Product_1 = require("../models/Product");
+const Order_1 = require("../models/Order");
 const User_1 = __importDefault(require("../models/User"));
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const totalProducts = yield Product_1.default.countDocuments();
+    const totalProducts = yield Product_1.Product.count();
     const totalUsers = yield User_1.default.countDocuments();
-    const categories = yield Product_1.default.distinct('category');
+    const allProducts = yield Product_1.Product.findAll();
+    const categories = Array.from(new Set(allProducts.map(p => p.category)));
     const totalCategories = categories.length;
     // No Supplier model, so use 0 as placeholder
     const totalSuppliers = 0;
     const totalCustomers = 0;
     // Total Purchase and Outgoing from Order
-    const totalPurchase = yield Order_1.default.countDocuments({ status: 'purchase' });
-    const totalOutgoing = yield Order_1.default.countDocuments({ status: 'completed' });
+    const totalPurchase = yield Order_1.Order.countDocuments({ status: 'purchase' });
+    const totalOutgoing = yield Order_1.Order.countDocuments({ status: 'completed' });
     // For chart: get product names and stock
-    const products = yield Product_1.default.find({}, 'name stock');
+    const products = yield Product_1.Product.findAll({ attributes: ['name', 'stock'] });
     // Product list for dashboard table
-    const productList = yield Product_1.default.find({}, 'name price stock image category');
+    const productList = yield Product_1.Product.findAll({ attributes: ['id', 'name', 'price', 'stock', 'image', 'category'] });
     // Find product with lowest stock
-    const lowStockProduct = yield Product_1.default.findOne().sort({ stock: 1 });
+    const lowStockProduct = yield Product_1.Product.findOne({ order: [['stock', 'ASC']] });
     // Find winner product (most sold)
-    const orders = yield Order_1.default.find({ 'items.0': { $exists: true } });
+    const orders = yield Order_1.Order.findAll({ include: [{ model: Order_1.OrderItem, as: 'items' }] });
     const salesMap = {};
     for (const order of orders) {
         for (const item of order.items) {
+            const prod = yield Product_1.Product.findByPk(item.productId);
             const key = String(item.productId);
             if (!salesMap[key]) {
-                // Get product name
-                const prod = yield Product_1.default.findById(item.productId);
                 salesMap[key] = { name: prod ? prod.name : 'Unknown', sold: 0 };
             }
             salesMap[key].sold += item.quantity;

@@ -13,24 +13,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const Order_1 = __importDefault(require("../models/Order"));
+const Order_1 = require("../models/Order");
 const json2csv_1 = require("json2csv");
 const pdfkit_1 = __importDefault(require("pdfkit"));
 const router = (0, express_1.Router)();
 // Generate reports from database
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { from, to, export: exportType } = req.query;
-    const dateFilter = {};
+    const where = {};
     if (from)
-        dateFilter.$gte = new Date(from);
+        where.orderDate = Object.assign(Object.assign({}, (where.orderDate || {})), { $gte: new Date(from) });
     if (to)
-        dateFilter.$lte = new Date(to);
-    const dateQuery = Object.keys(dateFilter).length ? { orderDate: dateFilter } : {};
-    const orders = yield Order_1.default.find(dateQuery).sort({ orderDate: -1 });
+        where.orderDate = Object.assign(Object.assign({}, (where.orderDate || {})), { $lte: new Date(to) });
+    const orders = yield Order_1.Order.findAll({ where, order: [['orderDate', 'DESC']] });
     const reports = orders.map(order => ({
         date: order.orderDate.toISOString().slice(0, 10),
         type: order.status === 'purchase' ? 'Purchase' : 'Sale',
-        details: `Order #${order._id}`,
+        details: `Order #${order.id}`,
         amount: order.totalAmount
     }));
     if (exportType === 'csv') {

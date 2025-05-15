@@ -1,21 +1,48 @@
-import { Schema, model, Document } from 'mongoose';
+import { DataTypes, Model } from 'sequelize';
+import { sequelize } from '../db';
 
-export interface IProduct extends Document {
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  image?: string;
-  lowStockThreshold: number;
+export class Product extends Model {
+  public id!: number;
+  public name!: string;
+  public category!: string;
+  public price!: number;
+  public stock!: number;
+  public image?: string;
+  public lowStockThreshold!: number;
 }
 
-const productSchema = new Schema<IProduct>({
-  name: { type: String, required: true },
-  category: { type: String, required: true },
-  price: { type: Number, required: true },
-  stock: { type: Number, required: true },
-  image: { type: String },
-  lowStockThreshold: { type: Number, default: 10 }
-});
-
-export default model<IProduct>('Product', productSchema); 
+Product.init({
+  id: {
+    type: DataTypes.INTEGER.UNSIGNED,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  category: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  stock: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  lowStockThreshold: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 10,
+  },
+}, {
+  sequelize,
+  tableName: 'products',
+}); 
