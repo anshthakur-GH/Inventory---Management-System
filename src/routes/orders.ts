@@ -60,4 +60,21 @@ router.post('/', async (req, res) => {
   res.redirect('/orders');
 });
 
+// Add route to update order status
+router.post('/status/:id', async (req, res) => {
+  const orderId = req.params.id;
+  const { status } = req.body;
+  try {
+    const order = await Order.findByPk(orderId);
+    if (!order) {
+      return res.status(404).send('Order not found');
+    }
+    order.status = status;
+    await order.save();
+    res.redirect('/orders');
+  } catch (err) {
+    res.status(500).send('Server error');
+  }
+});
+
 export default router; 
