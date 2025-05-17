@@ -27,7 +27,9 @@ router.get('/', async (req, res) => {
         orderDate: order.orderDate.toISOString().slice(0, 10),
         productName: items[0]?.Product?.name || '',
         quantity: items[0]?.quantity || 0,
-        totalAmount: order.totalAmount
+        totalAmount: order.totalAmount,
+        status: order.status,
+        supplier: order.supplier
       };
     })
   });
