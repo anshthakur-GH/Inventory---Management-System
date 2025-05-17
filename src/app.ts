@@ -13,11 +13,13 @@ dotenv.config();
 connectDB();
 
 // Sync Sequelize models
-async function syncModels() {
-  await sequelize.sync({ alter: true });
-  console.log('All models were synchronized successfully.');
+if (process.env.NODE_ENV !== 'production') {
+  async function syncModels() {
+    await sequelize.sync({ alter: true });
+    console.log('All models were synchronized successfully.');
+  }
+  syncModels();
 }
-syncModels();
 
 const app = express();
 
