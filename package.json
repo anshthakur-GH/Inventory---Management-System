@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "build": "npx tsc && npx cpx \"src/views/**/*\" dist && npx cpx \"src/public/**/*\" dist",
+    "build": "npx tsc && npx cpx \"src/views/**/*\" dist/views && npx cpx \"src/public/**/*\" dist/public",
     "postinstall": "node -e \"if (process.platform !== 'win32') require('child_process').execSync('chmod +x ./node_modules/.bin/tsc')\""
   },
   "keywords": [],
