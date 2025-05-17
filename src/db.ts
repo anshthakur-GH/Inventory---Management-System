@@ -4,12 +4,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const sequelize = new Sequelize(
-  process.env.MYSQL_DATABASE || 'inventory',
-  process.env.MYSQL_USER || 'root',
-  process.env.MYSQL_PASSWORD || '',
+  process.env.MYSQLDATABASE || 'inventory',
+  process.env.MYSQLUSER || 'root',
+  process.env.MYSQLPASSWORD || '',
   {
-    host: process.env.MYSQL_HOST || 'localhost',
-    port: Number(process.env.MYSQL_PORT) || 3306,
+    host: process.env.MYSQLHOST || 'localhost',
+    port: Number(process.env.MYSQLPORT) || 3306,
     dialect: 'mysql',
     logging: false,
     dialectOptions: {
