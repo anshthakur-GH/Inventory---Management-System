@@ -13,8 +13,18 @@ RUN npm install --include=dev
 # Copy the rest of the application code
 COPY . .
 
+# ... previous lines ...
+RUN npm install --include=dev
+
+# Debug: List installed node modules and binaries
+RUN ls -l node_modules/.bin
+
+# Copy the rest of the application code
+COPY . .
+
 # Build the TypeScript code
 RUN npm run build
+# ... rest of file ...
 
 # Expose the port (change if your app uses a different port)
 EXPOSE 3000
