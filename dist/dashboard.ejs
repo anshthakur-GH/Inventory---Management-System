@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard - Inventory System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/sidebar') %>
+  <div class="dashboard">
+    <h1>Dashboard</h1>
+    <div class="metrics" style="display: flex; flex-wrap: wrap; gap: 20px;">
+      <div class="card" style="background:#4caf50;color:#fff;flex:1;min-width:180px;">Category<br><span style="font-size:2em;"><%= totalCategories || 0 %></span></div>
+      <div class="card" style="background:#ff9800;color:#fff;flex:1;min-width:180px;">Product<br><span style="font-size:2em;"><%= totalProducts %></span></div>
+      <div class="card" style="background:#9c27b0;color:#fff;flex:1;min-width:180px;">Supplier<br><span style="font-size:2em;"><%= totalSuppliers || 0 %></span></div>
+      <div class="card" style="background:#2196f3;color:#fff;flex:1;min-width:180px;">Winner Product<br><span style="font-size:1.2em;"><%= winnerProduct ? winnerProduct.name : 'None' %></span></div>
+    </div>
+    <h2>Product List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Image</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% productList.forEach(function(product, idx) { %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= product.price %></td>
+            <td><%= product.stock %></td>
+            <td>
+              <% if (product.image) { %>
+                <img src="<%= product.image %>" alt="<%= product.name %>" style="width:40px;height:40px;object-fit:cover;" />
+              <% } else { %>
+                <span style="color:#aaa;">No Image</span>
+              <% } %>
+            </td>
+            <td><%= product.category %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html> 

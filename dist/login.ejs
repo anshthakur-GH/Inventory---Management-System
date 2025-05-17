@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Inventory System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#f4f6f8;">
+    <form action="/login" method="POST" style="background:#fff;padding:40px 30px 30px 30px;border-radius:12px;box-shadow:0 4px 24px rgba(44,62,80,0.08);min-width:320px;display:flex;flex-direction:column;align-items:center;">
+      <h2 style="margin-bottom:24px;color:#222e3c;">Login</h2>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error" style="margin-bottom:16px;"><%= error %></div>
+      <% } %>
+      <input type="text" name="username" placeholder="Username" required style="margin-bottom:16px;padding:10px 14px;border-radius:6px;border:1px solid #ccc;width:100%;max-width:240px;">
+      <input type="password" name="password" placeholder="Password" required style="margin-bottom:24px;padding:10px 14px;border-radius:6px;border:1px solid #ccc;width:100%;max-width:240px;">
+      <button type="submit" style="background:linear-gradient(90deg,#1abc9c,#3498db);color:#fff;padding:12px 0;width:100%;max-width:240px;border:none;border-radius:6px;font-size:1.1em;font-weight:600;box-shadow:0 2px 8px rgba(52,152,219,0.08);transition:background 0.2s;cursor:pointer;">Login</button>
+    </form>
+  </div>
+</body>
+</html> 

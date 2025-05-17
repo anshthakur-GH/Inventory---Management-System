@@ -17,11 +17,18 @@ exports.default = connectDB;
 const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-exports.sequelize = new sequelize_1.Sequelize(process.env.MYSQL_DATABASE || 'inventory', process.env.MYSQL_USER || 'root', process.env.MYSQL_PASSWORD || '', {
-    host: process.env.MYSQL_HOST || 'localhost',
-    port: Number(process.env.MYSQL_PORT) || 3306,
+exports.sequelize = new sequelize_1.Sequelize(process.env.MYSQLDATABASE || 'inventory', process.env.MYSQLUSER || 'root', process.env.MYSQLPASSWORD || '', {
+    host: process.env.MYSQLHOST || 'localhost',
+    port: Number(process.env.MYSQLPORT) || 3306,
     dialect: 'mysql',
     logging: false,
+    dialectOptions: {
+        ssl: {
+            minVersion: 'TLSv1.2',
+            require: true,
+            rejectUnauthorized: false
+        }
+    }
 });
 function connectDB() {
     return __awaiter(this, void 0, void 0, function* () {

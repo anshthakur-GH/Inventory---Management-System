@@ -30,13 +30,14 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         products,
         orders: orders.map(order => {
             var _a, _b, _c;
-            return ({
+            const items = order.items;
+            return {
                 _id: order.id,
                 orderDate: order.orderDate.toISOString().slice(0, 10),
-                productName: ((_b = (_a = order.items[0]) === null || _a === void 0 ? void 0 : _a.Product) === null || _b === void 0 ? void 0 : _b.name) || '',
-                quantity: ((_c = order.items[0]) === null || _c === void 0 ? void 0 : _c.quantity) || 0,
+                productName: ((_b = (_a = items[0]) === null || _a === void 0 ? void 0 : _a.Product) === null || _b === void 0 ? void 0 : _b.name) || '',
+                quantity: ((_c = items[0]) === null || _c === void 0 ? void 0 : _c.quantity) || 0,
                 totalAmount: order.totalAmount
-            });
+            };
         })
     });
 }));

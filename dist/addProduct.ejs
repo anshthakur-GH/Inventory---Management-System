@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Product - Inventory System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/sidebar') %>
+  <div class="products">
+    <h1>Add Product</h1>
+    <form action="/products/add" method="POST">
+      <input type="text" name="name" placeholder="Product Name" required>
+      <input type="text" name="category" placeholder="Category" required>
+      <input type="number" name="price" placeholder="Price" min="0" required>
+      <input type="number" name="stock" placeholder="Stock" min="0" required>
+      <input type="text" name="image" placeholder="Image URL (optional)">
+      <input type="number" name="lowStockThreshold" placeholder="Low Stock Threshold" min="0" value="10">
+      <button type="submit">Add Product</button>
+    </form>
+  </div>
+</body>
+</html> 
