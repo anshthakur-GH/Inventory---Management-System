@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reports - Inventory System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/sidebar') %>
+  <div class="reports">
+    <h1>Reports</h1>
+    <form method="GET" action="/reports">
+      <label>From: <input type="date" name="from" placeholder="From date"></label>
+      <label>To: <input type="date" name="to" placeholder="To date"></label>
+      <button type="submit">Filter</button>
+      <button type="submit" name="export" value="pdf">Export PDF</button>
+      <button type="submit" name="export" value="csv">Export CSV</button>
+    </form>
+    <h2>Report Preview</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th><th>Type</th><th>Details</th><th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reports.forEach(report => { %>
+          <tr>
+            <td><%= report.date %></td>
+            <td><%= report.type %></td>
+            <td><%= report.details %></td>
+            <td><%= report.amount %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html> 
