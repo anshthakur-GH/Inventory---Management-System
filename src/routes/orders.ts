@@ -65,14 +65,19 @@ router.post('/status/:id', async (req, res) => {
   const orderId = req.params.id;
   const { status } = req.body;
   try {
+    console.log('Order ID:', orderId);
+    console.log('New Status:', status);
     const order = await Order.findByPk(orderId);
     if (!order) {
+      console.log('Order not found');
       return res.status(404).send('Order not found');
     }
     order.status = status;
     await order.save();
+    console.log('Order status updated');
     res.redirect('/orders');
   } catch (err) {
+    console.error('Error updating order status:', err);
     res.status(500).send('Server error');
   }
 });
