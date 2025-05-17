@@ -14,8 +14,9 @@ router.post('/login', async (req, res) => {
   if (!user) {
     return res.render('login', { error: 'Invalid username or password' });
   }
-  // Plain text password check
-  if (user.password !== password) {
+  // Use bcrypt to check hashed password
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
     return res.render('login', { error: 'Invalid username or password' });
   }
   req.session.userId = user.id;
